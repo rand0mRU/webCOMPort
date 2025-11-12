@@ -58,6 +58,11 @@
 			<div class="shadow-md border-gray-300 p-3">
 				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
 
+				<div class="flex items-center mb-4">
+					<input id="autosize" type="checkbox" value="" class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
+					<label for="autosize" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автомасштабирование</label>
+				</div>
+
 				<div class="mb-5">
 					<label for="xmaxtext" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина
 						отрисовки</label>
@@ -95,7 +100,31 @@
 		function baudRate() {
 			return parseInt($("#baudRate").val());
 		}
+
 		let isPlotter = true;
+		let nowRead = false;
+		let autoSize = false;
+		let xMax = 100;
+		let yMax = 2048;
+		let lastData = [];
+
+		$("#autosize").change((event) => {
+			autoSize = $("#autosize").is(":checked");
+			if (!autoSize) {
+				xMax = $("#xmaxtext").val();
+				yMax = $("#ymaxtext").val();
+			}
+		});
+
+		function max(data) {
+			let mx = 0;
+			data.forEach((element) => {
+				if (element > mx)
+					mx = element;
+			});
+			return mx;
+		}
+
 		$("#monport").hide();
 
 		$(".plotterActivate").click(() => {
@@ -117,10 +146,6 @@
 		let middle = canvas.height / 2;
 		// let middle = 0;
 		let ctx = canvas.getContext("2d");
-		let lastData = [];
-		let xMax = 100;
-		let yMax = 2048;
-		let nowRead = false;
 
 		$("#xmaxtext").val(xMax);
 		$("#ymaxtext").val(yMax);
@@ -205,6 +230,10 @@
 								if (lastData.length > xMax) {
 									lastData.length = xMax;
 								}
+								if (autoSize) {
+									yMax = 2 * max(lastData) + (max(lastData) * 0.15);
+								}
+
 								draw(lastData);
 							}
 							newtext(line);
