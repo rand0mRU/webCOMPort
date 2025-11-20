@@ -90,8 +90,22 @@
 			</ul>
 			<label for="port" class="block mb-2 font-bold text-xl text-gray-900 dark:text-white">Монитор порта</label>
 			<textarea id="port" rows="24"
-				class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+				class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3"
 				placeholder="Пока что тут пусто"></textarea>
+
+			<div class="shadow-md border-gray-300 p-3">
+				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
+
+				<div class="flex items-center mb-4">
+					<input id="autoscroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600" checked>
+					<label for="autoscroll" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автопрокрутка</label>
+				</div>
+				<div class="mb-5">
+					<label for="mxlines" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Максимальное количество строк</label>
+					<input type="number" id="mxlines"
+						class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+				</div>
+			</div>
 		</div>
 
 	</div>
@@ -106,7 +120,11 @@
 		let autoSize = false;
 		let xMax = 100;
 		let yMax = 2048;
-		let lastData = [];
+		// let lastData = [];
+		let allData = [];
+		let colors = ["green", "red", "blue", "white", "orange"];
+		let autoScroll = true;
+		let mxLines = 100;
 
 		$("#autosize").change((event) => {
 			autoSize = $("#autosize").is(":checked");
@@ -114,6 +132,10 @@
 				xMax = $("#xmaxtext").val();
 				yMax = $("#ymaxtext").val();
 			}
+		});
+
+		$("#autoscroll").change((event) => {
+			autoScroll = $("#autoscroll").is(":checked");
 		});
 
 		function max(data) {
@@ -149,6 +171,7 @@
 
 		$("#xmaxtext").val(xMax);
 		$("#ymaxtext").val(yMax);
+		$("#mxlines").val(mxLines);
 
 		$("#xmaxtext").change((event) => {
 			xMax = parseInt(event.target.value);
@@ -156,28 +179,39 @@
 		$("#ymaxtext").change((event) => {
 			yMax = parseInt(event.target.value);
 		});
+		$("#mxlines").change((event) => {
+			mxLines = parseInt(event.target.value);
+		});
 
 		function abs(x) {
 			if (x < 0) return x * -1;
 			return x;
 		}
 
-		function draw(data) {
+		function draw(all) {
 			if (isPlotter) {
 				ctx.clearRect(0, 0, canvas.width, canvas.height);
-				ctx.beginPath();
-				ctx.moveTo(xMax * (canvas.width / xMax), (yMax / canvas.height) * (middle - data[abs(xMax)]));
-				ctx.strokeStyle = "green";
-				for (let i = xMax; i > 0; i--) {
-					ctx.lineTo(Math.round(i * (canvas.width / xMax)), Math.round(middle - ((canvas.height / yMax) * (data[abs(xMax - i)]))));
-					// console.log(middle - ((canvas.height / (yMax * 2)) * (data[abs(xMax - i)])));
-				}
-				ctx.stroke();
+				all.forEach((data, index) => {
+					ctx.beginPath();
+					ctx.moveTo(xMax * (canvas.width / xMax), (yMax / canvas.height) * (middle - data[abs(xMax)]));
+					ctx.strokeStyle = colors[index];
+					for (let i = xMax; i > 0; i--) {
+						ctx.lineTo(Math.round(i * (canvas.width / xMax)), Math.round(middle - ((canvas.height / yMax) * (data[abs(xMax - i)]))));
+						// console.log(middle - ((canvas.height / (yMax * 2)) * (data[abs(xMax - i)])));
+					}
+					ctx.stroke();
+				});
 			}
 		}
 		function newtext(data) {
 			$("#port").append(data + "&NewLine;");
-			document.getElementById("port").scrollTop = document.getElementById("port").scrollHeight;
+
+			if ($("#port").text().split('\n').length > mxLines) {
+				let content = $("#port").text().split('\n').slice(-mxLines).join('\n');
+				$("#port").val(content);
+			}
+			
+			if (autoScroll) document.getElementById("port").scrollTop = document.getElementById("port").scrollHeight;
 		}
 
 		async function connectToSerial() {
@@ -192,6 +226,7 @@
 		}
 		async function disconnectFromSerial() {
 			try {
+				nowRead = false;
 				await window.port.close();
 				console.log("Port closed");
 			} catch (error) {
@@ -206,12 +241,13 @@
 
 			try {
 				while (true) {
+					if (!nowRead) break;
+
 					const { value, done } = await reader.read();
 					if (done) {
 						nowRead = false;
 						break;
 					}
-					if (!nowRead) break;
 
 					buffer += new TextDecoder().decode(value);
 
@@ -223,19 +259,32 @@
 						line = line.replace('\r', '').trim();
 
 						if (line) {
-							const number = parseInt(line);
+							const stringInts = line.match(/-?\d+/g); 
 
-							if (!isNaN(number)) {
-								lastData.unshift(number);
-								if (lastData.length > xMax) {
-									lastData.length = xMax;
+							if (stringInts) {
+    							const integers = stringInts.map(numStr => parseInt(numStr));
+								
+								if (integers.length < allData.length) {
+									allData.length = integers.length;
 								}
+								let maxes = [];
+								integers.forEach((number, index) => {
+									if (!isNaN(number)) {
+										if (allData[index] === undefined)
+											allData[index] = [];
+										allData[index].unshift(number);
+										allData[index].length = xMax;
+										maxes.push(max(allData[index]));
+									}
+								});
 								if (autoSize) {
-									yMax = 2 * max(lastData) + (max(lastData) * 0.15);
+									let ymx = max(maxes);
+									yMax = 2 * ymx + (ymx * 0.15);
 								}
 
-								draw(lastData);
+								draw(allData);
 							}
+
 							newtext(line);
 						}
 					}

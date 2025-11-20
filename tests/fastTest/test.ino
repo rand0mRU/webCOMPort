@@ -1,9 +1,9 @@
 void setup() {
   // put your setup code here, to run once:
-  Serial.begin(4800);
+  Serial.begin(9600);
 }
 
 void loop() {
   // put your main code here, to run repeatedly:
-  Serial.println(1024-random(1024)); delay(1);
+  Serial.println(random(1024)); delay(1);
 }
