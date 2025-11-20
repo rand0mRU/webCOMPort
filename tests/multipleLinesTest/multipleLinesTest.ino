@@ -10,5 +10,5 @@ void loop() {
   Serial.print(random(1024)); 
   Serial.print(", "); 
   Serial.println(random(1024)); 
-  delay(1);
+  delay(100);
 }
