@@ -27,7 +27,7 @@ jobs:
 
         mkdir -p gh-pages-repo/comport
         
-        cp -r ./* gh-pages-repo/comport
+        rsync -av --delete ./ gh-pages-repo/comport/ --exclude='.git'
         
         cd gh-pages-repo
         git add .
