@@ -27,7 +27,8 @@ jobs:
 
         mkdir -p gh-pages-repo/comport
         
-        cp -r ./*.html ./*.css ./*.js ./images gh-pages-repo/comport/
+        # cp -r ./*.html ./*.css ./*.js gh-pages-repo/comport/
+        # cp -r ./*.html ./*.md ./*.js gh-pages-repo/comport/
         
         cd gh-pages-repo
         git add .
