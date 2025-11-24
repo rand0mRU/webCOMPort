@@ -31,6 +31,8 @@ jobs:
         cp -r ./*.html ./*.md ./*.js gh-pages-repo/comport/
         
         cd gh-pages-repo
+        git config user.name "GitHub Actions"
+        git config user.email "actions@github.com"
         git add .
         git commit -m "[webCOMPort] Auto-deploy from main: ${{ github.sha }}"
         git push
