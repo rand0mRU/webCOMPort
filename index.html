@@ -10,7 +10,7 @@
 
 <body class="dark:bg-gray-800">
 	<div class="p-5 pb-0">
-		<div class="shadow-md border-gray-300 p-2 inline-block">
+		<div class="shadow-md border-gray-300 p-4 inline-block rounded-xl">
 			<label for="baudRate" class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Подключение</label>
 			<select style="display: inline-block;" id="baudRate"
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -40,8 +40,8 @@
 		</div>
 	</div>
 	<div id="forCanvas" class="p-5 pt-3">
-		<div id="msg" class="mb-3 ц">
-			<div class="shadow-md border-gray-300 p-2 inline-block w-full">
+		<div id="msg" class="mb-3">
+			<div class="shadow-md border-gray-300 p-4 rounded-xl inline-block w-full">
 				<label for="message"
 					class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Сообщение</label>
 				<input type="text" id="message" placeholder="Напишите что-то..."
@@ -68,8 +68,8 @@
 			</ul>
 
 			<p class="block mb-2 text-xl font-bold text-gray-900 dark:text-white">Плоттер</p>
-			<canvas id="canvas" class="h-[90vh] w-full bg-gray-700 rounded-lg mb-3"></canvas>
-			<div class="shadow-md border-gray-300 p-3">
+			<canvas id="canvas" class="h-[90vh] w-full dark:bg-gray-700 rounded-lg mb-3 shadow-lg"></canvas>
+			<div class="shadow-md border-gray-300 p-3 rounded-xl">
 				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
 
 				<div class="flex items-center mb-4">
