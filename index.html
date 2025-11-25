@@ -40,6 +40,20 @@
 		</div>
 	</div>
 	<div id="forCanvas" class="p-5 pt-3">
+		<div id="msg" class="mb-3 ц">
+			<div class="shadow-md border-gray-300 p-2 inline-block w-full">
+				<label for="message"
+					class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Сообщение</label>
+				<input type="text" id="message" placeholder="Напишите что-то..."
+					class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+				<button type="button" style="display: inline-block;" id="sendMessage"
+					class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					Отправить</button>
+				<button type="button" style="display: inline-block;" id="clsMessage"
+					class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+					Очистить</button>
+			</div>
+		</div>
 		<div id="plotter">
 			<ul class="flex flex-wrap text-sm font-medium text-center text-gray-400 mb-3">
 				<li class="me-2">
@@ -59,8 +73,10 @@
 				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
 
 				<div class="flex items-center mb-4">
-					<input id="autosize" type="checkbox" value="" class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
-					<label for="autosize" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автомасштабирование</label>
+					<input id="autosize" type="checkbox" value=""
+						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
+					<label for="autosize"
+						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автомасштабирование</label>
 				</div>
 
 				<div class="mb-5">
@@ -97,11 +113,16 @@
 				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
 
 				<div class="flex items-center mb-4">
-					<input id="autoscroll" type="checkbox" value="" class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600" checked>
-					<label for="autoscroll" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автопрокрутка</label>
+					<input id="autoscroll" type="checkbox" value=""
+						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
+						checked>
+					<label for="autoscroll"
+						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автопрокрутка</label>
 				</div>
 				<div class="mb-5">
-					<label for="mxlines" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Максимальное количество строк</label>
+					<label for="mxlines"
+						class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Максимальное количество
+						строк</label>
 					<input type="number" id="mxlines"
 						class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				</div>

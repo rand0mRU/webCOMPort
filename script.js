@@ -7,7 +7,6 @@ let nowRead = false;
 let autoSize = false;
 let xMax = 100;
 let yMax = 2048;
-// let lastData = [];
 let allData = [];
 let colors = ["green", "red", "blue", "white", "orange"];
 let autoScroll = true;
@@ -23,6 +22,14 @@ $("#autosize").change((event) => {
 
 $("#autoscroll").change((event) => {
     autoScroll = $("#autoscroll").is(":checked");
+});
+
+$("#sendMessage").click(async () => {
+    await writeToPort($("#message").val());
+    $("#message").val("");
+});
+$("#clsMessage").click(() => {
+    $("#message").val("");
 });
 
 function max(data) {
@@ -183,15 +190,15 @@ async function readFromPort() {
     }
 }
 async function writeToPort(data) {
-    const reader = window.port.writable.getWriter();
+    const writer = window.port.writable.getWriter();
 
     try {
         const encoder = new TextEncoder();
         await writer.write(encoder.encode(data));
-        console.log("Data sended");
+        console.log("Data sended:", data);
     } catch (error) {
-        console.log("Error when read window.port: ", error);
+        console.log("Error when write window.port: ", error);
     } finally {
-        reader.releaseLock();
+        writer.releaseLock();
     }
 }
