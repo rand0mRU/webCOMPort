@@ -1,3 +1,7 @@
+if (('serial' in navigator) == false) {
+    alert("Ваш браузер не поддерживает Web Serial API");
+    console.log("Your browser doesn't support Web Serial API");
+}
 function baudRate() {
     return parseInt($("#baudRate").val());
 }
