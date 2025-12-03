@@ -32,13 +32,13 @@
 				<option>250000</option>
 			</select>
 			<button type="button" style="display: inline-block;"
-				class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 ms-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+				class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 ms-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
 				onclick="connectToSerial()">Подключиться</button>
 			<button type="button" style="display: inline-block;"
-				class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+				class="focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
 				onclick="nowRead = false;disconnectFromSerial()">Отключится</button>
 			<button type="button" style="display: inline-block;"
-				class="stopRead focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+				class="stopRead focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
 				onclick="changeRead()">Остановить чтение</button>
 		</div>
 	</div>
@@ -50,15 +50,15 @@
 				<input type="text" id="message" placeholder="Напишите что-то..."
 					class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				<button type="button" style="display: inline-block;" id="sendMessage"
-					class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+					class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
 					Отправить</button>
 				<button type="button" style="display: inline-block;" id="clsMessage"
-					class="focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
+					class="focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
 					Очистить</button>
 			</div>
 		</div>
 		<div id="plotter">
-			<ul class="flex flex-wrap text-sm font-medium text-center text-gray-400 mb-3">
+			<ul class="flex flex-wrap text-sm font-semibold text-center text-gray-400 mb-3">
 				<li class="me-2">
 					<a href="#canvas"
 						class="inline-block px-4 py-3 text-white bg-blue-600 rounded-lg active">Плоттер</a>
@@ -70,7 +70,7 @@
 				</li>
 				<div class="absolute right-0 pe-3">
 					<button type="button" style="display: inline-block;"
-						class="stopRead focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+						class="stopRead focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
 						onclick="changeRead()">Остановить чтение</button>
 				</div>
 			</ul>
@@ -84,16 +84,16 @@
 					<input id="autosize" type="checkbox" value=""
 						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
 					<label for="autosize"
-						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автомасштабирование</label>
+						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автомасштабирование</label>
 				</div>
 
 				<div class="mb-5">
-					<label for="xmaxtext" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Ширина
+					<label for="xmaxtext" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Ширина
 						отрисовки</label>
 					<input type="number" id="xmaxtext"
 						class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 
-					<label for="ymaxtext" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Высота
+					<label for="ymaxtext" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Высота
 						отрисовки</label>
 					<input type="number" id="ymaxtext"
 						class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -102,7 +102,7 @@
 
 		</div>
 		<div id="monport">
-			<ul class="flex flex-wrap text-sm font-medium text-center text-gray-400 mb-3">
+			<ul class="flex flex-wrap text-sm font-semibold text-center text-gray-400 mb-3">
 				<li class="me-2">
 					<a href="#"
 						class="plotterActivate inline-block px-4 py-3 hover:bg-blue-500 dark:hover:bg-gray-800 hover:text-white rounded-lg">Плоттер</a>
@@ -113,7 +113,7 @@
 				</li>
 				<div class="absolute right-0 pe-3">
 					<button type="button" style="display: inline-block;"
-						class="stopRead focus:outline-none text-white focus:ring-4 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
+						class="stopRead focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
 						onclick="changeRead()">Остановить чтение</button>
 				</div>
 			</ul>
@@ -130,24 +130,24 @@
 						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
 						checked>
 					<label for="autoscroll"
-						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автопрокрутка</label>
+						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автопрокрутка</label>
 				</div>
 				<div class="flex items-center mb-4">
 					<input id="autoshowtime" type="checkbox" value=""
 						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
 					<label for="autoshowtime"
-						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Показывать время</label>
+						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Показывать время</label>
 				</div>
 				<div class="flex items-center mb-4">
 					<input id="autonewline" type="checkbox" value=""
 						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
 						checked>
 					<label for="autonewline"
-						class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Автоперенос строки</label>
+						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автоперенос строки</label>
 				</div>
 				<div class="mb-5">
 					<label for="mxlines"
-						class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Максимальное количество
+						class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Максимальное количество
 						строк</label>
 					<input type="number" id="mxlines"
 						class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
@@ -158,7 +158,7 @@
 			<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Информация о подключении</p>
 
 
-			<p id="connectInfo" class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Пока нет
+			<p id="connectInfo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Пока нет
 				информации</label>
 		</div>
 	</div>
