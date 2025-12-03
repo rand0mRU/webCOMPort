@@ -1,6 +1,13 @@
 function baudRate() {
     return parseInt($("#baudRate").val());
 }
+function updateConnectInfo() {
+    $("#connectInfo").html(`Подключено: ${window.port.connected}<br>
+Время подключения: ${new Date().toLocaleTimeString("ru")}<br>
+baudRate: ${baudRate()}<br>
+usbProductId: ${window.port.getInfo()["usbProductId"]}<br>
+usbVendorId: ${window.port.getInfo()["usbVendorId"]}<br>`);
+}
 
 let isPlotter = true;
 let nowRead = false;
@@ -8,9 +15,21 @@ let autoSize = false;
 let xMax = 100;
 let yMax = 2048;
 let allData = [];
-let colors = ["green", "red", "blue", "white", "orange"];
+let colors = ["green", "red", "blue", "purple", "orange"];
 let autoScroll = true;
+let autoShowTime = false;
+let autoNewLine = true;
 let mxLines = 100;
+
+function changeRead() {
+    nowRead = !nowRead;
+    if (nowRead) {
+        $(".stopRead").html("Остановить чтение");
+    } else {
+        $(".stopRead").html("Продолжить чтение");
+
+    }
+}
 
 $("#autosize").change((event) => {
     autoSize = $("#autosize").is(":checked");
@@ -22,6 +41,12 @@ $("#autosize").change((event) => {
 
 $("#autoscroll").change((event) => {
     autoScroll = $("#autoscroll").is(":checked");
+});
+$("#autoshowtime").change((event) => {
+    autoShowTime = $("#autoshowtime").is(":checked");
+});
+$("#autonewline").change((event) => {
+    autoNewLine = $("#autonewline").is(":checked");
 });
 
 $("#sendMessage").click(async () => {
@@ -63,6 +88,10 @@ let middle = canvas.height / 2;
 // let middle = 0;
 let ctx = canvas.getContext("2d");
 
+// ctx.textAlign = 'left';
+// ctx.textBaseline = 'middle';
+// ctx.font = '20px SegoeUI';
+
 $("#xmaxtext").val(xMax);
 $("#ymaxtext").val(yMax);
 $("#mxlines").val(mxLines);
@@ -85,6 +114,18 @@ function abs(x) {
 function draw(all) {
     if (isPlotter) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
+        // ctx.fillStyle = "grey";
+
+        // ctx.fillRect(20, middle, canvas.width, 1);
+        // ctx.fillText("0", 3, middle);
+
+        // ctx.fillRect(20, Math.round((canvas.height / yMax) * (yMax - (yMax * 0.1))), canvas.width, 1);
+        // ctx.fillText((yMax - (yMax * 0.1)).toString(), 3, Math.round(middle - ((canvas.height / yMax) * (yMax - (yMax * 0.1)))));
+
+        // ctx.fillRect(20, (canvas.height / yMax) * (0 + (yMax * 0.1)), canvas.width, 1);
+        // ctx.fillText((0 + (yMax * 0.1)).toString(), 3, middle - (canvas.height / yMax) * (0 + (yMax * 0.1)));
+        // console.log(Math.round(((canvas.height / yMax) * (yMax - (yMax * 0.1)))));
+
         all.forEach((data, index) => {
             ctx.beginPath();
             ctx.moveTo(xMax * (canvas.width / xMax), (yMax / canvas.height) * (middle - data[abs(xMax)]));
@@ -98,7 +139,15 @@ function draw(all) {
     }
 }
 function newtext(data) {
-    $("#port").append(data + "&NewLine;");
+    let preModifier = "";
+    let postModifier = "";
+    if (autoShowTime) {
+        preModifier += "[" + new Date().toLocaleTimeString("ru") + "." + new Date().getMilliseconds() + "] ";
+    }
+    if (autoNewLine) {
+        postModifier += "&NewLine;";
+    }
+    $("#port").append(preModifier + data + postModifier);
 
     if ($("#port").text().split('\n').length > mxLines) {
         let content = $("#port").text().split('\n').slice(-mxLines).join('\n');
@@ -113,6 +162,11 @@ async function connectToSerial() {
         window.port = await navigator.serial.requestPort();
         await window.port.open({ baudRate: baudRate() });
         console.log("Port opened", baudRate());
+        updateConnectInfo();
+
+        nowRead = false;
+        allData = [];
+
         await readFromPort();
     } catch (error) {
         alert(error);
@@ -121,6 +175,7 @@ async function connectToSerial() {
 async function disconnectFromSerial() {
     try {
         nowRead = false;
+        window.reader.releaseLock();
         await window.port.close();
         console.log("Port closed");
     } catch (error) {
@@ -130,63 +185,62 @@ async function disconnectFromSerial() {
 let buffer = '';
 
 async function readFromPort() {
-    const reader = window.port.readable.getReader();
+    window.reader = window.port.readable.getReader();
     nowRead = true;
 
     try {
         while (true) {
-            if (!nowRead) break;
-
-            const { value, done } = await reader.read();
+            const { value, done } = await window.reader.read();
             if (done) {
                 nowRead = false;
                 break;
             }
+            if (nowRead) {
+                buffer += new TextDecoder().decode(value);
 
-            buffer += new TextDecoder().decode(value);
+                const lines = buffer.split('\n');
 
-            const lines = buffer.split('\n');
+                buffer = lines.pop() || '';
 
-            buffer = lines.pop() || '';
+                for (let line of lines) {
+                    line = line.replace('\r', '').trim();
 
-            for (let line of lines) {
-                line = line.replace('\r', '').trim();
+                    if (line) {
+                        const stringInts = line.match(/-?\d+/g);
 
-                if (line) {
-                    const stringInts = line.match(/-?\d+/g);
+                        if (stringInts) {
+                            const integers = stringInts.map(numStr => parseInt(numStr));
 
-                    if (stringInts) {
-                        const integers = stringInts.map(numStr => parseInt(numStr));
-
-                        if (integers.length < allData.length) {
-                            allData.length = integers.length;
-                        }
-                        let maxes = [];
-                        integers.forEach((number, index) => {
-                            if (!isNaN(number)) {
-                                if (allData[index] === undefined)
-                                    allData[index] = [];
-                                allData[index].unshift(number);
-                                allData[index].length = xMax;
-                                maxes.push(max(allData[index]));
+                            if (integers.length < allData.length) {
+                                allData.length = integers.length;
                             }
-                        });
-                        if (autoSize) {
-                            let ymx = max(maxes);
-                            yMax = 2 * ymx + (ymx * 0.15);
+                            let maxes = [];
+                            integers.forEach((number, index) => {
+                                if (!isNaN(number)) {
+                                    if (allData[index] === undefined)
+                                        allData[index] = [];
+                                    allData[index].unshift(number);
+                                    allData[index].length = xMax;
+                                    maxes.push(max(allData[index]));
+                                }
+                            });
+                            if (autoSize) {
+                                let ymx = max(maxes);
+                                yMax = 2 * ymx + (ymx * 0.15);
+                            }
+
+                            draw(allData);
                         }
 
-                        draw(allData);
+                        newtext(line);
                     }
-
-                    newtext(line);
                 }
             }
         }
     } catch (error) {
         console.log("Error when reading port: ", error);
     } finally {
-        reader.releaseLock();
+        window.reader.releaseLock();
     }
 }
 async function writeToPort(data) {
