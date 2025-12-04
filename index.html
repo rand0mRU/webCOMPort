@@ -6,6 +6,26 @@
 	<meta name="viewwindow.port" content="width=device-width, initial-scale=1.0">
 	<title>webPlotter</title>
 	<script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+	<!-- for old browsers -->
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {},
+            },
+        }
+        
+        // Принудительная установка темы при загрузке
+        document.addEventListener('DOMContentLoaded', function() {
+            if (localStorage.getItem('theme') === 'dark' || 
+                (!localStorage.getItem('theme') && 
+                 window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.add('light');
+            }
+        });
+    </script>
 </head>
 
 <body class="dark:bg-gray-800">
