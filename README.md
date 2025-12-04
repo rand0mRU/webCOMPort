@@ -7,6 +7,8 @@
 
 ### Введение
 
+Приложение доступно по ссылке - https://rand0mRU.github.io/comport
+
 Монитор и плоттер для COM порта (последовательного порта), написанный на HTML и JS для работы в браузере.
 
 ### Используете Firefox?
@@ -18,6 +20,8 @@
 ## English
 
 ### Introduction
+
+The application is available at the link - https://rand0mRU.github.io/comport
 
 Monitor and plotter for COM port (serial port), written in HTML and JS for browser operation.
 
