@@ -5,26 +5,26 @@
 	<meta charset="UTF-8">
 	<meta name="viewwindow.port" content="width=device-width, initial-scale=1.0">
 	<title>webPlotter</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+	<script src="https://cdn.tailwindcss.com"></script>
 	<!-- for old browsers -->
-    <script>
-        tailwind.config = {
-            darkMode: 'class',
-            theme: {
-                extend: {},
-            },
-        }
-        
-        document.addEventListener('DOMContentLoaded', function() {
-            if (localStorage.getItem('theme') === 'dark' || 
-                (!localStorage.getItem('theme') && 
-                 window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.add('light');
-            }
-        });
-    </script>
+	<script>
+		tailwind.config = {
+			darkMode: 'class',
+			theme: {
+				extend: {},
+			},
+		}
+
+		document.addEventListener('DOMContentLoaded', function () {
+			if (localStorage.getItem('theme') === 'dark' ||
+				(!localStorage.getItem('theme') &&
+					window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.add('light');
+			}
+		});
+	</script>
 </head>
 
 <body class="dark:bg-gray-800">
@@ -74,6 +74,14 @@
 				<button type="button" style="display: inline-block;" id="clsMessage"
 					class="focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800">
 					Очистить</button>
+
+				<select style="display: inline-block;" id="addToMsg"
+					class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+					<option selected>Нет конца строки</option>
+					<option>Новая строка (\n)</option>
+					<option>Возврат каретки (\r)</option>
+					<option>Новая строка и возврат каретки (\r\n)</option>
+				</select>
 			</div>
 		</div>
 		<div id="plotter">
@@ -175,7 +183,6 @@
 		</div>
 		<div class="shadow-md border-gray-300 p-4 rounded-xl">
 			<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Информация о подключении</p>
-
 
 			<p id="connectInfo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Пока нет
 				информации</label>

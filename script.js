@@ -25,6 +25,8 @@ let autoShowTime = false;
 let autoNewLine = true;
 let mxLines = 100;
 
+// $("#port").val("");
+
 function changeRead() {
     nowRead = !nowRead;
     if (nowRead) {
@@ -54,7 +56,18 @@ $("#autonewline").change((event) => {
 });
 
 $("#sendMessage").click(async () => {
-    await writeToPort($("#message").val());
+    let postModifier = "";
+
+    if ($("#addToMsg").val() == "Новая строка (\\n)") {
+        postModifier += "\n";
+    }
+    if ($("#addToMsg").val() == "Возврат каретки (\\r)") {
+        postModifier += "\r";
+    }
+    if ($("#addToMsg").val() == "Новая строка и возврат каретки (\\r\\n)") {
+        postModifier += "\r\n";
+    }
+    await writeToPort($("#message").val() + postModifier);
     $("#message").val("");
 });
 $("#clsMessage").click(() => {
@@ -248,15 +261,14 @@ async function readFromPort() {
     }
 }
 async function writeToPort(data) {
-    const writer = window.port.writable.getWriter();
-
+    window.writer = window.port.writable.getWriter();
     try {
         const encoder = new TextEncoder();
-        await writer.write(encoder.encode(data));
+        await window.writer.write(encoder.encode(data));
         console.log("Data sended:", data);
     } catch (error) {
         console.log("Error when write window.port: ", error);
     } finally {
-        writer.releaseLock();
+        window.writer.releaseLock();
     }
 }
