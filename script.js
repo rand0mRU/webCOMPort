@@ -6,13 +6,24 @@ function baudRate() {
     return parseInt($("#baudRate").val());
 }
 function updateConnectInfo() {
-    $("#connectInfo").html(`Подключено: ${window.port.connected}<br>
-Время подключения: ${new Date().toLocaleTimeString("ru")}<br>
-baudRate: ${baudRate()}<br>
-usbProductId: ${window.port.getInfo()["usbProductId"]}<br>
-usbVendorId: ${window.port.getInfo()["usbVendorId"]}<br>`);
+    if (connected) {
+        $("#status").removeClass("text-red-400");
+        $("#status").addClass("text-green-400");
+        $("#status").text("[Подключено]");
+        $("#connectInfo").html(`Подключено: ${window.port.connected}<br>
+                                Время подключения: ${new Date().toLocaleTimeString("ru")}<br>
+                                baudRate: ${baudRate()}<br>
+                                usbProductId: ${window.port.getInfo()["usbProductId"]}<br>
+                                usbVendorId: ${window.port.getInfo()["usbVendorId"]}<br>`);
+    } else {
+        $("#status").addClass("text-red-400");
+        $("#status").removeClass("text-green-400");
+        $("#status").text("[Отключено]");
+        $("#connectInfo").html("Подключитесь для получения информации");
+    }
 }
 
+let connected = false;
 let isPlotter = true;
 let nowRead = false;
 let autoSize = false;
@@ -23,6 +34,7 @@ let colors = ["green", "red", "blue", "purple", "orange"];
 let autoScroll = true;
 let autoShowTime = false;
 let autoNewLine = true;
+let showUserMessages = false;
 let mxLines = 100;
 
 // $("#port").val("");
@@ -54,7 +66,24 @@ $("#autoshowtime").change((event) => {
 $("#autonewline").change((event) => {
     autoNewLine = $("#autonewline").is(":checked");
 });
+$("#showusermessages").change((event) => {
+    showUserMessages = $("#showusermessages").is(":checked");
+});
 
+$("#ctrlBtn").click(async () => {
+    if (connected) {
+        await disconnectFromSerial();
+    } else {
+        $("#ctrlBtn").text("Отключиться");
+        await connectToSerial();
+    }
+
+    if (connected) {
+        $("#ctrlBtn").text("Отключиться");
+    } else {
+        $("#ctrlBtn").text("Подключиться");
+    }
+});
 $("#sendMessage").click(async () => {
     let postModifier = "";
 
@@ -67,7 +96,12 @@ $("#sendMessage").click(async () => {
     if ($("#addToMsg").val() == "Новая строка и возврат каретки (\\r\\n)") {
         postModifier += "\r\n";
     }
-    await writeToPort($("#message").val() + postModifier);
+
+    let message = $("#message").val() + postModifier;
+
+    await writeToPort(message);
+    if (showUserMessages)
+        newtext("> " + message);
     $("#message").val("");
 });
 $("#clsMessage").click(() => {
@@ -179,6 +213,7 @@ async function connectToSerial() {
         window.port = await navigator.serial.requestPort();
         await window.port.open({ baudRate: baudRate() });
         console.log("Port opened", baudRate());
+        connected = true;
         updateConnectInfo();
 
         nowRead = false;
@@ -194,7 +229,9 @@ async function disconnectFromSerial() {
         nowRead = false;
         window.reader.releaseLock();
         await window.port.close();
+        connected = false;
         console.log("Port closed");
+        updateConnectInfo(false);
     } catch (error) {
         alert(error);
     }

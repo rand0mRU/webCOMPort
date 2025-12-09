@@ -30,7 +30,14 @@
 <body class="dark:bg-gray-800">
 	<div class="p-5 pb-0">
 		<div class="shadow-md border-gray-300 p-4 inline-block rounded-xl">
-			<label for="baudRate" class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Подключение</label>
+			<div class="flex justify-between w-full text-base">
+				<label for="baudRate" class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">
+					Управление
+				</label>
+				<p id="status" class="block mb-2 text-lg font-bold text-red-400 text-right">
+					[Отключено]
+				</p>
+			</div>
 			<select style="display: inline-block;" id="baudRate"
 				class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
 				<option>300</option>
@@ -50,12 +57,8 @@
 				<option>230400</option>
 				<option>250000</option>
 			</select>
-			<button type="button" style="display: inline-block;"
-				class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 ms-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
-				onclick="connectToSerial()">Подключиться</button>
-			<button type="button" style="display: inline-block;"
-				class="focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
-				onclick="nowRead = false;disconnectFromSerial()">Отключится</button>
+			<button type="button" style="display: inline-block;" id="ctrlBtn"
+				class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 ms-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Подключиться</button>
 			<button type="button" style="display: inline-block;"
 				class="stopRead focus:outline-none text-white focus:ring-4 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 bg-blue-600 hover:bg-blue-700 focus:ring-blue-800"
 				onclick="changeRead()">Остановить чтение</button>
@@ -66,7 +69,7 @@
 			<div class="shadow-md border-gray-300 p-4 rounded-xl inline-block w-full">
 				<label for="message"
 					class="block mb-2 text-lg font-bold text-gray-900 dark:text-white">Сообщение</label>
-				<input type="text" id="message" placeholder="Напишите что-то..."
+				<input type="text" id="message" placeholder="Напишите что-то..." spellcheck="false"
 					class="mb-3 bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
 				<button type="button" style="display: inline-block;" id="sendMessage"
 					class="focus:outline-none text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-semibold rounded-lg text-sm px-5 py-2.5 me-2 mb-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
@@ -92,7 +95,7 @@
 				</li>
 				<li class="me-2">
 					<a href="#"
-						class="monPortActivate inline-block px-4 py-3 rounded-lg hover:bg-blue-500 dark:hover:bg-gray-800 hover:text-white">Монитор
+						class="monPortActivate inline-block px-4 py-3 rounded-lg hover:text-gray-900 dark:hover:text-white">Монитор
 						порта</a>
 				</li>
 				<div class="absolute right-0 pe-3">
@@ -132,7 +135,7 @@
 			<ul class="flex flex-wrap text-sm font-semibold text-center text-gray-400 mb-3">
 				<li class="me-2">
 					<a href="#"
-						class="plotterActivate inline-block px-4 py-3 hover:bg-blue-500 dark:hover:bg-gray-800 hover:text-white rounded-lg">Плоттер</a>
+						class="plotterActivate inline-block px-4 py-3 hover:text-gray-900 dark:hover:text-white rounded-lg">Плоттер</a>
 				</li>
 				<li class="me-2">
 					<a href="#port" class="inline-block px-4 py-3 rounded-lg text-white bg-blue-600 active">Монитор
@@ -147,30 +150,39 @@
 			<label for="port" class="block mb-2 font-bold text-xl text-gray-900 dark:text-white">Монитор порта</label>
 			<textarea id="port" rows="24"
 				class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500 mb-3"
-				placeholder="Пока что тут пусто"></textarea>
+				placeholder="Пока что тут пусто" spellcheck="false"></textarea>
 
 			<div class="shadow-md border-gray-300 p-4 rounded-xl">
 				<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Настройки</p>
-
-				<div class="flex items-center mb-4">
-					<input id="autoscroll" type="checkbox" value=""
-						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
-						checked>
-					<label for="autoscroll"
-						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автопрокрутка</label>
-				</div>
-				<div class="flex items-center mb-4">
-					<input id="autoshowtime" type="checkbox" value=""
-						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
-					<label for="autoshowtime"
-						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Показывать время</label>
-				</div>
-				<div class="flex items-center mb-4">
-					<input id="autonewline" type="checkbox" value=""
-						class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
-						checked>
-					<label for="autonewline"
-						class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автоперенос строки</label>
+				<div class="flex">
+					<div class="flex items-center mb-4 me-5">
+						<input id="autoscroll" type="checkbox" value=""
+							class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
+							checked>
+						<label for="autoscroll"
+							class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автопрокрутка</label>
+					</div>
+					<div class="flex items-center mb-4 me-5">
+						<input id="showusermessages" type="checkbox" value=""
+							class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
+						<label for="showusermessages"
+							class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Отображать ваши
+							сообщения</label>
+					</div>
+					<div class="flex items-center mb-4 me-5">
+						<input id="autoshowtime" type="checkbox" value=""
+							class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600">
+						<label for="autoshowtime"
+							class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Показывать время</label>
+					</div>
+					<div class="flex items-center mb-4 me-5">
+						<input id="autonewline" type="checkbox" value=""
+							class="w-4 h-4 text-blue-600 rounded-sm focus:ring-blue-500 focus:ring-blue-600 ring-offset-gray-800 focus:ring-2 bg-gray-300 border-gray-600"
+							checked>
+						<label for="autonewline"
+							class="ms-2 text-sm font-semibold text-gray-900 dark:text-gray-300">Автоперенос
+							строки</label>
+					</div>
 				</div>
 				<div class="mb-5">
 					<label for="mxlines"
@@ -184,8 +196,8 @@
 		<div class="shadow-md border-gray-300 p-4 rounded-xl">
 			<p class="text-xl text-gray-900 dark:text-white mb-3 font-bold">Информация о подключении</p>
 
-			<p id="connectInfo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Пока нет
-				информации</label>
+			<p id="connectInfo" class="block mb-2 text-sm font-semibold text-gray-900 dark:text-white">Подключитесь для
+				получения информации</label>
 		</div>
 	</div>
 	<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
