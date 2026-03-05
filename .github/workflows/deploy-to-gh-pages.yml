@@ -28,7 +28,7 @@ jobs:
     - name: Copy files
       run: |
         mkdir -p gh-pages-repo/comport
-        cp -r ./*.html ./*.md ./*.js gh-pages-repo/comport/
+        cp -r ./*.html ./*.md ./*.js ./*.css gh-pages-repo/comport/
     
     - name: Commit and push
       run: |
