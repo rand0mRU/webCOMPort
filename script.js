@@ -141,9 +141,9 @@ let middle = canvas.height / 2;
 // let middle = 0;
 let ctx = canvas.getContext("2d");
 
-// ctx.textAlign = 'left';
-// ctx.textBaseline = 'middle';
-// ctx.font = '20px SegoeUI';
+ctx.textAlign = 'left';
+ctx.textBaseline = 'middle';
+ctx.font = '25px sans-serif';
 
 $("#xmaxtext").val(xMax);
 $("#ymaxtext").val(yMax);
@@ -164,24 +164,27 @@ function abs(x) {
     return x;
 }
 
+function coordX(data) {
+    return Math.round(data * (canvas.width / xMax));
+}
+function coordY(data) {
+    return Math.round(middle - ((canvas.height / yMax) * (data)))
+}
+
 function draw(all) {
     if (isPlotter) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        // ctx.fillStyle = "grey";
+        ctx.fillStyle = "grey";
 
-        // ctx.fillRect(20, middle, canvas.width, 1);
-        // ctx.fillText("0", 3, middle);
+        ctx.fillRect(Math.round(ctx.measureText("0").width + 15), Math.round(middle), canvas.width, 2);
 
-        // ctx.fillRect(20, Math.round((canvas.height / yMax) * (yMax - (yMax * 0.1))), canvas.width, 1);
-        // ctx.fillText((yMax - (yMax * 0.1)).toString(), 3, Math.round(middle - ((canvas.height / yMax) * (yMax - (yMax * 0.1)))));
+        ctx.fillRect(Math.round(ctx.measureText(Math.round((yMax * 0.5)).toString()).width + 15), Math.round(middle - (middle / yMax) * (yMax * 0.5)), canvas.width, 2);
 
-        // ctx.fillRect(20, (canvas.height / yMax) * (0 + (yMax * 0.1)), canvas.width, 1);
-        // ctx.fillText((0 + (yMax * 0.1)).toString(), 3, middle - (canvas.height / yMax) * (0 + (yMax * 0.1)));
-        // console.log(Math.round(((canvas.height / yMax) * (yMax - (yMax * 0.1)))));
+        ctx.fillRect(Math.round(ctx.measureText(Math.round((yMax * -0.5)).toString()).width + 15), Math.round(canvas.height -  (middle / yMax) * (yMax * 0.5)), canvas.width, 2);
 
         all.forEach((data, index) => {
             ctx.beginPath();
-            ctx.moveTo(xMax * (canvas.width / xMax), (yMax / canvas.height) * (middle - data[abs(xMax)]));
+            ctx.moveTo(xMax * (canvas.width / xMax), (canvas.height / yMax) * (middle - data[abs(xMax)]));
             ctx.strokeStyle = colors[index];
             for (let i = xMax; i > 0; i--) {
                 ctx.lineTo(Math.round(i * (canvas.width / xMax)), Math.round(middle - ((canvas.height / yMax) * (data[abs(xMax - i)]))));
@@ -189,6 +192,15 @@ function draw(all) {
             }
             ctx.stroke();
         });
+        ctx.textBaseline = 'top';
+        ctx.fillText(Math.round(yMax).toString(), 5, 10);
+        ctx.textBaseline = 'bottom';
+        ctx.fillText(Math.round(-yMax).toString(), 5, canvas.height);
+        
+        ctx.textBaseline = 'middle';
+        ctx.fillText("0", 5, middle);
+        ctx.fillText(Math.round((yMax * 0.5)).toString(), 5, Math.round(middle - (middle / yMax) * (yMax * 0.5)));
+        ctx.fillText(Math.round((yMax * -0.5)).toString(), 5, Math.round(middle + (middle / yMax) * (yMax * 0.5)));
     }
 }
 function newtext(data) {
